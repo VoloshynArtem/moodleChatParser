@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Flask settings
+instance/
+*.pyc
+
+# Ignore test, debug, and log files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Unit test cache
+.pytest_cache/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+htmlcov/
+
+# VSCode / other editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore compiled html/json artifacts
+*.html
+*.json
+
+
+# OS-specific
+.DS_Store
+Thumbs.db
