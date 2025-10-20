@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import json 
 from chat_parser import parse_chat_html_to_json
+from message_flow import *
 
 app = Flask(__name__)
 CORS(app)
@@ -15,7 +16,7 @@ def find_new_messages(messages):
     global last_messages
     new_msgs = []
 
-    if (len(last_messages) == 0): # handle first message restart start
+    if (len(last_messages) == 0): # handle first message after restart 
         last_messages = messages.copy()
         return last_messages[-1]
     
@@ -39,7 +40,7 @@ def chat_div_found(chat_div):
         m = find_new_messages(parse_chat_html_to_json(chat_div))
         json.dump(m, f, ensure_ascii=False, indent=2)
         print(m)
-        
+        #TODO: message flow here
 
 
 @app.route('/upload-html', methods=['POST'])
@@ -59,6 +60,8 @@ def upload_html():
         return jsonify({"status": "error", "message": "chat-list not found"}), 404
 
 if __name__ == '__main__':
+    #TODO: fox msgflow starting twice due to flask reloader
+    message_flow(0, "moodle chat read started")
     app.run(debug=True)
 
 
