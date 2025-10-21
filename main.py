@@ -18,7 +18,7 @@ def find_new_messages(messages):
 
     if (len(last_messages) == 0): # handle first message after restart 
         last_messages = messages.copy()
-        return last_messages[-1]
+        return [last_messages[-1]]
     
     for msg in messages:
         if msg not in last_messages:
@@ -39,8 +39,8 @@ def chat_div_found(chat_div):
     with open('new_chat_list.json', 'w', encoding='utf-8') as f:
         m = find_new_messages(parse_chat_html_to_json(chat_div))
         json.dump(m, f, ensure_ascii=False, indent=2)
-        print(m)
-        #TODO: message flow here
+        for msg in m:
+            message_flow(1,f"{msg.get("username")} =>> {msg.get("message")}")
 
 
 @app.route('/upload-html', methods=['POST'])

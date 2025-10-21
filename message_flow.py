@@ -7,9 +7,13 @@ from dotenv import load_dotenv, dotenv_values
 load_dotenv() 
 
 def message_flow(notification_level, message):
-    #0 = os level only; 1 = os + discord level
-    os_notification(message)
+    #0 = print level only 1 = print + os level ; 2 = print + os + discord level
+    print(message)
     if notification_level == 0: return
+    
+    os_notification(message)
+    if notification_level == 1: return
+    
     discord_notification(message)
 
 

@@ -8,10 +8,12 @@ A simple Flask API to upload and parse chat HTML, extracting new messages from m
 - Saves output in multiple formats (for debugging for now)
 
 ### Output
-
 - chat_list.html: Extracted chat section
 - chat_list.json: Full parsed chat
 - new_chat_list.json: Only new messages (compared to last run, may contain multiple items)
+- messageflow 
+    - os notifications (only tested with KDE Plasma for now)
+    - discord notifications with webhooks  
 - ... more to come
 
 
@@ -20,13 +22,11 @@ A simple Flask API to upload and parse chat HTML, extracting new messages from m
 ### Install dependencies:
 ```
 pip install -r requirements.txt
-
 ```
 
 ### Run the server:
 ```
 python main.py
-
 ```
 
 ### create a MutationObserver by runniong the following in your browser's console
@@ -61,6 +61,9 @@ if (chatList) {
         subtree: true,
         characterData: true
     });
+} else {
+    console.warn('#chat-list not found in the DOM');
+}
 ```
 
 ### disable Observer by running
@@ -68,8 +71,14 @@ if (chatList) {
 observer.disconnect();
 ```
 
+### seting up discord webhook
+go to your server settings -> Integrations -> Webhooks -> craete new Webhook, set name and channel -> Copy Webhook url  
+create .env file in project root directory  
+format .env file to 
+```
+WEBHOOK_URL = "<webhook url copied from discord>"
+```
+
 
 ## for now unrealized features
-- send notifications through OS
-- send notifications through Discord
 - store messages in database ?
