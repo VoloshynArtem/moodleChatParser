@@ -77,8 +77,15 @@ create .env file in project root directory
 format .env file to 
 ```
 WEBHOOK_URL = "<webhook url copied from discord>"
+
+ADMIN_USER = "<your postgres admin username>"   # usually postgres  
+ADMIN_PASSWORD= "<your postgres admin password>"
+NEW_USER  = "<your new postgres username>"
+NEW_USER_PASSWORD = "<your new postgres user password>"
+
 ```
 
 
-## for now unrealized features
-- store messages in database ?
+## for now unrealized/untested features
+- store messages in database (untested)
+- fix users going offline causing messages to be retriggered and treated as new 

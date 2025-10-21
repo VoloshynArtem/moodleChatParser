@@ -5,6 +5,7 @@ import re
 import json 
 from chat_parser import parse_chat_html_to_json
 from message_flow import *
+from database import *
 
 app = Flask(__name__)
 CORS(app)
@@ -13,6 +14,7 @@ lastKnownUsername = ""
 last_messages = []
 
 def find_new_messages(messages):
+    #TODO: fix user going offline causing msg treated as a new one 
     global last_messages
     new_msgs = []
 
@@ -41,6 +43,17 @@ def chat_div_found(chat_div):
         json.dump(m, f, ensure_ascii=False, indent=2)
         for msg in m:
             message_flow(1,f"{msg.get("username")} =>> {msg.get("message")}")
+            save_to_databese(msg)
+
+def save_to_databese(msg):
+    for atr in msg:        
+        insert_chat(
+            msg.get("message_id"),
+            msg.get("username"),
+            msg.get("message"),
+            msg.get("time")
+        )
+
 
 
 @app.route('/upload-html', methods=['POST'])
@@ -61,6 +74,7 @@ def upload_html():
 
 if __name__ == '__main__':
     #TODO: fox msgflow starting twice due to flask reloader
+    init_database()
     message_flow(0, "moodle chat read started")
     app.run(debug=True)
 

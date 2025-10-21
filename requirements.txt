@@ -3,3 +3,4 @@ beautifulsoup4
 Flask-Cors
 requests
 python-dotenv
+psycopg2-binary
