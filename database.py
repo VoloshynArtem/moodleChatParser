@@ -96,6 +96,7 @@ def _create_table_if_not_exists():
 
 
 def insert_chat(msg_id, username, message, time_str):
+    u_violated = False
     try:
         time_obj = datetime.strptime(time_str, "%H:%M").time()
 
@@ -121,6 +122,7 @@ def insert_chat(msg_id, username, message, time_str):
 
     except UniqueViolation:
         conn.rollback()
+        u_violated = True
 
     except psycopg2.Error as e:
         print("Error inserting data:", e)
@@ -130,4 +132,5 @@ def insert_chat(msg_id, username, message, time_str):
                 cur.close()
             if conn:
                 conn.close()
+            return u_violated
 

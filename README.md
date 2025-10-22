@@ -4,7 +4,8 @@ A simple Flask API to upload and parse chat HTML, extracting new messages from m
 ## Features
 - Accepts raw chat HTML via POST request on /upload-html
 - Extracts message metadata using BeautifulSoup
-- Saves output in multiple formats (for debugging for now)
+- Saves output in db
+- separates new messages from old ones using db unique violation exception
 
 ### Output
 - messageflow 
@@ -83,7 +84,7 @@ NEW_USER_PASSWORD = "<your new postgres user password>"
 
 
 ## for now unrealized/untested features
-- refactor find new message to use db for lookup instead
 - refactor message flow
 - make everything a docker container 
 - coloring messages in terminal output 
+- tracking reactions (out of scope for now)
