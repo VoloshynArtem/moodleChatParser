@@ -1,20 +1,17 @@
 ## moodle chat parser
-A simple Flask API to upload and parse chat HTML, extracting new messages from moodle (bcause i was bored)
+A simple Flask API to upload and parse chat HTML, extracting new messages from moodle (bcause I was bored)
 
 ## Features
-
 - Accepts raw chat HTML via POST request on /upload-html
 - Extracts message metadata using BeautifulSoup
 - Saves output in multiple formats (for debugging for now)
 
 ### Output
-- chat_list.html: Extracted chat section
-- chat_list.json: Full parsed chat
-- new_chat_list.json: Only new messages (compared to last run, may contain multiple items)
 - messageflow 
     - os notifications (only tested with KDE Plasma for now)
     - discord notifications with webhooks  
-- ... more to come
+- saving messages into db running in docker
+
 
 
 ## Usage
@@ -82,10 +79,11 @@ ADMIN_USER = "<your postgres admin username>"   # usually postgres
 ADMIN_PASSWORD= "<your postgres admin password>"
 NEW_USER  = "<your new postgres username>"
 NEW_USER_PASSWORD = "<your new postgres user password>"
-
 ```
 
 
 ## for now unrealized/untested features
-- store messages in database (untested)
-- fix users going offline causing messages to be retriggered and treated as new 
+- refactor find new message to use db for lookup instead
+- refactor message flow
+- make everything a docker container 
+- coloring messages in terminal output 

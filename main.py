@@ -1,11 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from bs4 import BeautifulSoup
-import re
+
 import json 
 from chat_parser import parse_chat_html_to_json
 from message_flow import *
 from database import *
+import logging
+
+log = logging.getLogger('werkzeug')
+log.disabled = True
 
 app = Flask(__name__)
 CORS(app)
@@ -14,7 +18,6 @@ lastKnownUsername = ""
 last_messages = []
 
 def find_new_messages(messages):
-    #TODO: fix user going offline causing msg treated as a new one 
     global last_messages
     new_msgs = []
 
@@ -22,28 +25,22 @@ def find_new_messages(messages):
         last_messages = messages.copy()
         return [last_messages[-1]]
     
-    for msg in messages:
-        if msg not in last_messages:
+    for msg in reversed(messages):# workaround for not checking all messages, alternatively working closer with db 
+        if msg.get("message_id") not in [m.get("message_id") for m in last_messages]:
             new_msgs.append(msg)
             last_messages.append(msg)
+        else:
+            break
 
     return new_msgs
 
 
 
 def chat_div_found(chat_div):
-    with open('chat_list.html', 'w', encoding='utf-8') as f:
-        f.write(chat_div)
+    for msg in find_new_messages(parse_chat_html_to_json(chat_div)):
+        message_flow(1,f"{msg.get("username")} =>> {msg.get("message")}")
+        save_to_databese(msg)
 
-    with open('chat_list.json', 'w', encoding='utf-8') as f:
-        json.dump(parse_chat_html_to_json(chat_div), f, ensure_ascii=False, indent=2)
-
-    with open('new_chat_list.json', 'w', encoding='utf-8') as f:
-        m = find_new_messages(parse_chat_html_to_json(chat_div))
-        json.dump(m, f, ensure_ascii=False, indent=2)
-        for msg in m:
-            message_flow(1,f"{msg.get("username")} =>> {msg.get("message")}")
-            save_to_databese(msg)
 
 def save_to_databese(msg):
     for atr in msg:        
@@ -73,10 +70,6 @@ def upload_html():
         return jsonify({"status": "error", "message": "chat-list not found"}), 404
 
 if __name__ == '__main__':
-    #TODO: fox msgflow starting twice due to flask reloader
     init_database()
-    message_flow(0, "moodle chat read started")
     app.run(debug=True)
-
-
 
