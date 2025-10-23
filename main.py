@@ -18,22 +18,23 @@ def find_new_messages(messages):
     new_msgs = []
 
     for msg in reversed(messages):
-        if not save_to_databese(msg):
+        if not check_exists(msg.get("message_id")):
             new_msgs.append(msg)
         else: 
             break
-
-    return new_msgs
+            
+    return reversed(new_msgs)
 
 
 
 def chat_div_found(chat_div):
     for msg in find_new_messages(parse_chat_html_to_json(chat_div)):
         message_flow(1,f"{msg.get("username")} =>> {msg.get("message")}")
+        save_to_databese(msg)
 
 
 def save_to_databese(msg):      
-    return insert_chat(
+    insert_chat(
         msg.get("message_id"),
         msg.get("username"),
         msg.get("message"),
