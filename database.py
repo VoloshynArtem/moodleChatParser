@@ -97,8 +97,10 @@ def _create_table_if_not_exists():
 
 def insert_chat(msg_id, username, message, time_str):
     try:
-        today = datetime.today().date()
-        timestamp = datetime.strptime(f"{today} {time_str}", "%Y-%m-%d %H:%M")
+        timestamp = None
+        if time_str:
+            today = datetime.today().date()
+            timestamp = datetime.strptime(f"{today} {time_str}", "%Y-%m-%d %H:%M")
 
         with _connect_to_db() as conn:
             with conn.cursor() as cur:   
